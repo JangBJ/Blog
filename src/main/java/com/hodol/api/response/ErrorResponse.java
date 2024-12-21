@@ -11,6 +11,7 @@ package com.hodol.api.response;
    이런식으로 변환이 되게 만듬
 * */
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -18,13 +19,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-@RequiredArgsConstructor
 public class ErrorResponse {
     private final String code;
     private final String message;
-
-    // private Map<String, String> validation; // 이렇게 만들면 초기값이 null이라서 밑처럼 HashMap으로 만들어줌
     private Map<String, String> validation = new HashMap<>();
+
+    @Builder
+    public ErrorResponse(String code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
 
     public void addValidation(String fieldName, String errorMessage) {
         this.validation.put(fieldName, errorMessage);

@@ -14,15 +14,15 @@ public class ExceptionController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ErrorResponse invalidRequestHandler(MethodArgumentNotValidException e) {
-/*            FieldError fieldError = e.getFieldError();
-            String field = fieldError.getField();           // 무슨 필드가 잘못된 필드인지
-            String message = fieldError.getDefaultMessage();// 에러 메시지 호출*/
-        ErrorResponse response = new ErrorResponse("400", "잘못된 요청입니다");
+        ErrorResponse response = ErrorResponse.builder()
+                .code("400")
+                .message("잘못된 요청입니다")
+                .build();
 
-        // 리스트에 에러을 담음 e.getFieldErrors()
         for(FieldError fieldError : e.getFieldErrors()) {
             response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
         }
+
         return response;
     }
 }
