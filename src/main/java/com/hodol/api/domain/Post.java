@@ -27,12 +27,9 @@ public class Post {
         this.content = content;
     }
 
+    // 10글자 제한
     public String getTitle(){
-        // 엔티티 클래스에서 Getter 메서드를 만들때 가능하면
-        // 서비스에 맞는 서비스의 정책을 넣지말기!!!!!! 절대로!!!!!!!!!!!
-        return this.title.substring(0,10);
+        return (this.title.length() <=10) ? this.title:this.title.substring(0,10);
     }
-
-
 
 }

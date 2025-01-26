@@ -1,5 +1,6 @@
 package com.hodol.api.response;
 
+import com.hodol.api.domain.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,19 @@ public class PostResponse {
     private final String content;
 
     public String getTitle() {
-        return this.title.substring(0,10);
+        return (this.title.length() <=10) ? this.title : this.title.substring(0,10);
+    }
+
+    public static PostResponse fromPost(Post post){
+
+        PostResponse response = PostResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .build();
+
+        return response;
     }
 }
+
+

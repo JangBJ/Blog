@@ -9,7 +9,7 @@ package com.hodol.api.response;
         }   어떤 필드가 잘못됐는지 알려주려면 Validation Object나 배열을 하나 만들어서 배열 형태로 박스를 만들어서
    }
    이런식으로 변환이 되게 만듬
-* */
+*/
 
 import lombok.Builder;
 import lombok.Getter;

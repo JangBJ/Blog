@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @ControllerAdvice
 public class ExceptionController {
+
+    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseBody
     public ErrorResponse invalidRequestHandler(MethodArgumentNotValidException e) {
         ErrorResponse response = ErrorResponse.builder()
                 .code("400")

@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
-public class PostCreate {
+public class  PostCreate {
 
     @NotBlank(message = "타이틀을 입력하세요.")
     private final String title;

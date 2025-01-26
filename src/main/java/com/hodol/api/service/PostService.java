@@ -8,8 +8,12 @@ import com.hodol.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -43,10 +47,19 @@ public class PostService {
         return response;
     }
 
-    // RSS를 발행하게 됐다
-   /* public Post getRss(Long id){
+    public List<PostResponse> getAll(Pageable pageable) {
+        // 이건 수동이라서 필요없음ㅠ (페이지 int로 받을때ㅠ)
+        // Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC,"id"));
 
-    }*/
+
+        List<Post> posts = postRepository.findAll(pageable).getContent();
+        List<PostResponse> responses = posts.stream().map(PostResponse::fromPost).toList();
+        return responses;
+    }
+
+    public void delete(Long id) {
+        postRepository.deleteById(id);
+    }
 }
 
 
