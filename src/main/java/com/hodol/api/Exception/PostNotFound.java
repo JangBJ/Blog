@@ -1,6 +1,10 @@
 package com.hodol.api.Exception;
 
-public class PostNotFound extends RuntimeException {
+/**
+ *
+ * status -> 404
+ */
+public class PostNotFound extends HodologException {
 
     private static final String MESSAGE = "존재하지 않는 글입니다.";
 
@@ -9,4 +13,8 @@ public class PostNotFound extends RuntimeException {
         super(MESSAGE);
     }
 
+    @Override
+    public int getSatusCode() {
+        return 404;
+    }
 }

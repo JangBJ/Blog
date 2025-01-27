@@ -1,6 +1,7 @@
 package com.hodol.api.contoroller;
 
 
+import com.hodol.api.Exception.InvalidRequest;
 import com.hodol.api.request.PostEdit;
 import jakarta.persistence.PostUpdate;
 import jakarta.validation.Valid;
@@ -24,6 +25,8 @@ public class PostController {
     // Case1. 저장한 데이터 Entity -> response로 응답하기
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request) {
+
+        request.validate();
         postService.write(request);
     }
 
