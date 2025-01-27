@@ -1,9 +1,12 @@
 package com.hodol.api.service;
 
 
+import com.hodol.api.Exception.PostNotFound;
 import com.hodol.api.domain.Post;
+import com.hodol.api.domain.PostEditor;
 import com.hodol.api.repository.PostRepository;
 import com.hodol.api.request.PostCreate;
+import com.hodol.api.request.PostEdit;
 import com.hodol.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,15 +40,15 @@ public class PostService {
     public PostResponse get(Long id) {
         // 조회 해오기
         Post post = postRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 글입니다.")); // 예외 던지기
+                .orElseThrow(PostNotFound::new); // 예외 던지기
         // 변환
-        PostResponse response = PostResponse.builder()
+        return PostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build();
 
-        return response;
+
     }
 
     public List<PostResponse> getAll(Pageable pageable) {
@@ -57,8 +61,26 @@ public class PostService {
         return responses;
     }
 
-    public void delete(Long id) {
-        postRepository.deleteById(id);
+    @Transactional
+    public void edit(Long id, PostEdit postEdit){
+        Post post = postRepository.findById(id).orElseThrow(PostNotFound::new);
+
+        PostEditor.PostEditorBuilder editorBuilder = post.toEditor();
+
+        // 이렇게 하면 변경하고 싶은 부분만 변경할 수 있나?
+        PostEditor postEditor = editorBuilder.title(postEdit.getTitle())
+                .content(postEdit.getContent()).build();
+
+        post.edit(postEditor);
+
+    }
+
+    public void deletePost(Long id) {
+
+        Post post = postRepository.findById(id).orElseThrow(PostNotFound::new);
+
+        postRepository.delete(post);
+
     }
 }
 

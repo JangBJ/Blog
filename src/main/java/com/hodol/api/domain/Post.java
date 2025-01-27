@@ -27,9 +27,16 @@ public class Post {
         this.content = content;
     }
 
-    // 10글자 제한
-    public String getTitle(){
-        return (this.title.length() <=10) ? this.title:this.title.substring(0,10);
+
+    // build하지 않은 클래스 자체를 넘겨준다? 이게 좋은건가?
+    public PostEditor.PostEditorBuilder toEditor(){
+        return PostEditor.builder()
+                .title(title)
+                .content(content);
     }
 
+    public void edit(PostEditor postEditor) {
+        title = postEditor.getTitle();
+        content = postEditor.getContent();
+    }
 }

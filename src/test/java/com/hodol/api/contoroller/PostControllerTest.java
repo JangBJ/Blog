@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hodol.api.domain.Post;
 import com.hodol.api.repository.PostRepository;
 import com.hodol.api.request.PostCreate;
+import com.hodol.api.request.PostEdit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,7 @@ import java.util.stream.IntStream;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -176,6 +176,57 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.length()", is(5)))
                 .andExpect(jsonPath("$[0].title").value("우히히29"))
                 .andExpect(jsonPath("$[0].content").value("재밌당29"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test7() throws Exception {
+
+        // given
+        Post post = Post.builder()
+                .title("우히히")
+                .content("재밌당")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit edit = PostEdit.builder()
+                .title("ㅇㅇㅇ")
+                .content("재밌당")
+                .build();
+
+        mockMvc.perform(patch("/posts/{postId}", post.getId())
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(edit)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 삭제")
+    void test8() throws Exception {
+
+        Post post = Post.builder()
+                .title("히히")
+                .content("재밌당")
+                .build();
+
+        postRepository.save(post);
+
+        mockMvc.perform(delete("/posts/{postId}", post.getId())
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글 조회")
+    void test9() throws Exception {
+
+        mockMvc.perform(delete("/posts/{postId}", 1L)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 }
