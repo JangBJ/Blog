@@ -56,7 +56,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/post 요청시 Hello World를 출력한다.")
+    @DisplayName("글 작성 요청시 Hello World를 출력한다.")
     void test() throws Exception{
         // given
         PostCreate request = PostCreate.builder()
@@ -77,7 +77,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/post 요청시 Title은 필수다")
+    @DisplayName("글 작성 요청시 Title은 필수다")
     void test2() throws Exception{
         // given
         PostCreate request = PostCreate.builder().content("내용입니다.").build();
@@ -97,7 +97,7 @@ class PostControllerTest {
 
 
     @Test
-    @DisplayName("/post 요청시 DB에 값을 저장한다.")
+    @DisplayName("글 작성 요청시 DB에 값을 저장한다.")
     void test3() throws Exception{
         PostCreate request = PostCreate.builder()
                 .title("제목입니다.")
@@ -108,10 +108,12 @@ class PostControllerTest {
         String json = objectMapper.writeValueAsString(request); // 파라미터러 온 것을 빈 규약에 따라 JSON형태로 가공해줌
 
         mockMvc.perform(post("/posts")
+                        .header("authorization", "JBJ") // 헤더로 인증 보내
                         .contentType(APPLICATION_JSON)    // 이걸로 JSON타입으로 바꾸는것?
                         .content(json))
                 .andExpect(status().isOk()) // 상태코드가 200이어야함
                 .andDo(print()); // 테스트에 대한 전반적인 요청 서머리 알고 싶을 때 사용
+
         assertEquals (1L,postRepository.count());
 
         Post post = postRepository.findAll().get(0);

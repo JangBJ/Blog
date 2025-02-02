@@ -1,15 +1,13 @@
 package com.hodol.api.contoroller;
 
 
-import com.hodol.api.Exception.InvalidRequest;
-import com.hodol.api.request.PostEdit;
-import jakarta.persistence.PostUpdate;
-import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
-import lombok.RequiredArgsConstructor;
 import com.hodol.api.request.PostCreate;
-import com.hodol.api.service.PostService;
+import com.hodol.api.request.PostEdit;
 import com.hodol.api.response.PostResponse;
+import com.hodol.api.service.PostService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +20,19 @@ public class PostController {
     // 글 등록
     private final PostService postService;
 
+    // 임시 라우터 추가
+    @GetMapping("/test")
+    public String test() {
+        return "hello";
+    }
+
     // Case1. 저장한 데이터 Entity -> response로 응답하기
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request) {
 
+        // 1. GET Parameter로 받기
+        // 2. POST(body) value
+        // 3. Header
         request.validate();
         postService.write(request);
     }
