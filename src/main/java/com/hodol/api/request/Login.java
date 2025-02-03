@@ -1,0 +1,16 @@
+package com.hodol.api.request;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public class Login {
+
+    @NotBlank(message = "이메일을 입력해 주세요")
+    private final String email;
+
+    @NotBlank(message = "비밀번호를 입력해 주세요")
+    private final String password;
+}
