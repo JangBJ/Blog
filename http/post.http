@@ -1,0 +1,7 @@
+// 형상관리 가능
+// http 요청 날려보기 가능
+
+### 테스트 요청
+POST http://localhost:8080/foo
+Content-Type: application/json
+Authorization: asdf
