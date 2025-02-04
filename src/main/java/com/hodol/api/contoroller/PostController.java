@@ -1,10 +1,12 @@
 package com.hodol.api.contoroller;
 
 
+import com.hodol.api.config.data.UserSession;
 import com.hodol.api.request.PostCreate;
 import com.hodol.api.request.PostEdit;
 import com.hodol.api.response.PostResponse;
 import com.hodol.api.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +19,18 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class PostController {
-    // 글 등록
+
     private final PostService postService;
 
-    // 임시 라우터 추가
-    @GetMapping("/test")
-    public String test() {
-        return "hello";
+    @GetMapping("/foo")
+    public Long foo(UserSession userSession) {
+        log.info(">>{}", userSession.Id);
+        return userSession.Id;
+    }
+
+    @GetMapping("/bar")
+    public String bar() {
+        return "인증이 필요없는 페이지";
     }
 
     // Case1. 저장한 데이터 Entity -> response로 응답하기
