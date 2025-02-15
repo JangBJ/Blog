@@ -1,6 +1,7 @@
 package com.hodol.api.service;
 
 import com.hodol.api.Exception.InvalidSigninInformation;
+import com.hodol.api.domain.Session;
 import com.hodol.api.domain.User;
 import com.hodol.api.repository.UserRepository;
 import com.hodol.api.request.Login;
@@ -15,10 +16,12 @@ public class AuthService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void signin(Login login){
+    public String signin(Login login){
         User user = userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword())
                 .orElseThrow(InvalidSigninInformation::new);
-        user.addSession();
+        Session session = user.addSession();
+
+        return session.getAccessToken();
     }
 
 }

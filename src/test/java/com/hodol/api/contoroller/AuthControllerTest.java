@@ -6,6 +6,7 @@ import com.hodol.api.domain.User;
 import com.hodol.api.repository.SessionRepository;
 import com.hodol.api.repository.UserRepository;
 import com.hodol.api.request.Login;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -30,6 +32,7 @@ class AuthControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -40,10 +43,10 @@ class AuthControllerTest {
     void clean() {userRepository.deleteAll();}
 
     @Test
-    @DisplayName("로그인 성공후 세션한개 생성")
+    @DisplayName("로그인 성공후 세션 응답")
     void test() throws Exception {
 
-        userRepository.save(User.builder()
+        User user = userRepository.save(User.builder()
                         .name("호돌맨")
                         .email("aa@aa.com")
                         .password("1111")
@@ -60,6 +63,7 @@ class AuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken", Matchers.notNullValue()))
                 .andDo(print());
 
         Assertions.assertEquals(1L,sessionRepository.count());
